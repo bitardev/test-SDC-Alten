@@ -1,0 +1,109 @@
+<div
+  class="card flex flex-column align-items-center justify-content-center px-5"
+>
+  <div class="relative">
+    <p-button
+      (onClick)="op.toggle($event)"
+      icon="pi pi-shopping-cart"
+      class="relative mr-3"
+      [rounded]="true"
+      [text]="true"
+      [raised]="true"
+    />
+    <p-badge
+      *ngIf="products.length > 0"
+      [value]="products.length"
+      severity="primary"
+      class="absolute -top-2 right-0"
+    />
+  </div>
+
+  <p-overlayPanel #op [style]="{ width: '550px' }" [showCloseIcon]="true">
+    <ng-template pTemplate="content">
+      <div *ngIf="products.length === 0">
+        <p>Votre panier est vide.</p>
+      </div>
+      <div *ngIf="products.length > 0">
+        <p-table [value]="products" responsiveLayout="scroll">
+          <!-- <ng-template pTemplate="header">
+            <tr>
+              <th pSortableColumn="name">Name <p-sortIcon field="name" /></th>
+              <th>Image</th>
+              <th pSortableColumn="price">
+                Price <p-sortIcon field="price" />
+              </th>
+            </tr>
+          </ng-template> -->
+          <ng-template pTemplate="body" let-rowData let-product>
+            <tr [pSelectableRow]="rowData">
+              <td>
+                <img
+                  src="https://primefaces.org/cdn/primeng/images/demo/product/{{
+                    product.image
+                  }}"
+                  [alt]="product.image"
+                  class="w-5rem shadow-2"
+                />
+              </td>
+              <td>
+                <div class="flex flex-column gap-1">
+                  <span class="text-xs font-medium text-900">
+                    {{ product.name }}
+                  </span>
+                  <span class="text-md font-semibold text-900">{{
+                    "$" + product.price
+                  }}</span>
+                </div>
+              </td>
+              <td>
+                <p-button
+                  [text]="true"
+                  (onClick)="supprimerProduit(product.id)"
+                  icon="pi pi-trash"
+                />
+              </td>
+              <td>
+                <div class="flex gap-2 align-items-center">
+                  <p-button
+                    (onClick)="incrementQty(product.id)"
+                    icon="pi pi-plus"
+                    severity="help"
+                    [outlined]="true"
+                    size="small"
+                  />
+                  <span class="text-md font-semibold">
+                    Qty: {{ product.quantity }}
+                  </span>
+                  <p-button
+                    (onClick)="decrementQty(product.id)"
+                    icon="pi pi-minus"
+                    severity="help"
+                    [outlined]="true"
+                    size="small"
+                  />
+                </div>
+              </td>
+            </tr>
+          </ng-template>
+        </p-table>
+      </div>
+    </ng-template>
+  </p-overlayPanel>
+</div>
+
+<!-- 
+<p-dataView #dv [value]="products">
+  <ng-template pTemplate="list" let-products>
+    @for (product of products; track product) {
+    <div class="text-lg font-medium text-900 my-2">
+      {{ product.name }} |
+      <p-tag
+        [value]="'$' + product.price"
+        [rounded]="true"
+        severity="secondary"
+      />
+    </div>
+    <button (click)="supprimerProduit(product.id)">Supprimer</button>
+    }
+  </ng-template>
+</p-dataView> -->
